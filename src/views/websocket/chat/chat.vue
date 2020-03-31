@@ -1,33 +1,33 @@
 <script>
 // import { actions } from './store';
 
-import Card from './components/card';
+import Card from './components/card'
 // import List from './components/list';
 // import Text from './components/text';
 // import Message from './components/message';
 
 export default {
-    components: { Card },// { Card, List, Text, Message },
-    vuex: {
-        // actions: actions
-    },
-    created () {
-        // this.initData();
-    }
+  components: { Card }, // { Card, List, Text, Message },
+  vuex: {
+    // actions: actions
+  },
+  created() {
+    // this.initData();
+  }
 }
 </script>
 
 <template>
-<div id="app">
+  <div id="app">
     <div class="sidebar">
-        <card></card>
-        <!-- <list></list> -->
+      <card />
+      <!-- <list></list> -->
     </div>
     <!-- <div class="main">
         <message></message>
         <text></text>
     </div> -->
-</div>
+  </div>
 </template>
 
 <style lang="less" scoped>

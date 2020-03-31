@@ -1,31 +1,31 @@
 <script>
-import { actions } from '../store';
+import { actions } from '../store'
 
 export default {
-    vuex: {
-        actions: actions,
-        getters: {
-            // 过滤后的会话列表
-            sessions: ({ sessions, filterKey }) => {
-                let result = sessions.filter(session => session.user.name.includes(filterKey));
-                return result;
-            },
-            // 当前会话index
-            currentId: ({ currentSessionId }) => currentSessionId
-        }
+  vuex: {
+    actions: actions,
+    getters: {
+      // 过滤后的会话列表
+      sessions: ({ sessions, filterKey }) => {
+        const result = sessions.filter(session => session.user.name.includes(filterKey))
+        return result
+      },
+      // 当前会话index
+      currentId: ({ currentSessionId }) => currentSessionId
     }
-};
+  }
+}
 </script>
 
 <template>
-<div class="list">
+  <div class="list">
     <ul>
-        <li v-for="item in sessions" :key="item" :class="{ active: item.id === currentId }" @click="selectSession(item.id)">
-            <img class="avatar"  width="30" height="30" :alt="item.user.name" :src="item.user.img">
-            <p class="name">{{item.user.name}}</p>
-        </li>
+      <li v-for="item in sessions" :key="item" :class="{ active: item.id === currentId }" @click="selectSession(item.id)">
+        <img class="avatar" width="30" height="30" :alt="item.user.name" :src="item.user.img">
+        <p class="name">{{ item.user.name }}</p>
+      </li>
     </ul>
-</div>
+  </div>
 </template>
 
 <style scoped lang="less">

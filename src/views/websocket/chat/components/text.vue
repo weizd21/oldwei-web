@@ -1,30 +1,30 @@
 <script>
-import { actions } from '../store';
+import { actions } from '../store'
 
 export default {
-    vuex: {
-        actions: actions
-    },
-    data () {
-        return {
-            content: ''
-        };
-    },
-    methods: {
-        onKeyup (e) {
-            if (e.ctrlKey && e.keyCode === 13 && this.content.length) {
-                this.sendMessage(this.content);
-                this.content = '';
-            }
-        }
+  vuex: {
+    actions: actions
+  },
+  data() {
+    return {
+      content: ''
     }
-};
+  },
+  methods: {
+    onKeyup(e) {
+      if (e.ctrlKey && e.keyCode === 13 && this.content.length) {
+        this.sendMessage(this.content)
+        this.content = ''
+      }
+    }
+  }
+}
 </script>
 
 <template>
-<div class="text">
-    <textarea placeholder="按 Ctrl + Enter 发送" v-model="content" @keyup="onKeyup"></textarea>
-</div>
+  <div class="text">
+    <textarea v-model="content" placeholder="按 Ctrl + Enter 发送" @keyup="onKeyup" />
+  </div>
 </template>
 
 <style lang="less" scoped>

@@ -108,7 +108,7 @@ export const constantRoutes = [
         meta: { title: '日志显示', icon: 'guide' }
       }
     ]
-    
+
   },
 
   {
@@ -219,7 +219,6 @@ export const asyncRoutes = [
       }
     ]
   },
-
   {
     path: '/icon',
     component: Layout,
@@ -232,13 +231,11 @@ export const asyncRoutes = [
       }
     ]
   },
-
   /** when your routing map is too long, you can split it into small modules **/
   componentsRouter,
   chartsRouter,
   nestedRouter,
   tableRouter,
-
   {
     path: '/example',
     component: Layout,
