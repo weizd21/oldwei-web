@@ -2,8 +2,8 @@
 export default {
   vuex: {
     getters: {
-      user: ({ user }) => user,
-      session: ({ sessions, currentSessionId }) => sessions.find(session => session.id === currentSessionId)
+      // user: ({ user }) => user,
+      // session: ({ sessions, currentSessionId }) => sessions.find(session => session.id === currentSessionId)
     }
   },
   filters: {

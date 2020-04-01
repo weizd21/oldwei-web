@@ -1,9 +1,9 @@
 <script>
-import { actions } from '../store'
+// import { actions } from '../store'
 
 export default {
   vuex: {
-    actions: actions
+    // actions: actions
   },
   data() {
     return {
@@ -13,7 +13,7 @@ export default {
   methods: {
     onKeyup(e) {
       if (e.ctrlKey && e.keyCode === 13 && this.content.length) {
-        this.sendMessage(this.content)
+        // this.sendMessage(this.content)
         this.content = ''
       }
     }

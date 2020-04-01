@@ -22,3 +22,13 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function getUserByUserCode(userCode) {
+  return request({
+    url: '/user/get',
+    method: 'get',
+    params: {userCode},
+    baseURL: '/api'
+  })
+
+}
