@@ -3,8 +3,9 @@
 
 import Card from './components/card'
 import List from './components/list';
-import Text from './components/text';
+import Msg from './components/msg';
 import Message from './components/message';
+import Sign from './components/sign'
 
 // 接收数据的类型 resType
 const MSG_ALL = "msg_all";
@@ -29,10 +30,10 @@ const GROUP_MESSAGE = "group_message";
 const SINGLE_MESSAGE = "single_message";
 
 
-import { getUserByUserCode } from "@/api/user";
+import { getUserByUserCode, registerUser } from "@/api/user";
 
 export default {
-  components: { Card, List, Text, Message },
+  components: { Card, List, Msg, Message, Sign},
   vuex: {
     // actions: actions
   },
@@ -41,7 +42,7 @@ export default {
         user:{
           id: "1",
           username: "魏正迪",
-          userCode: "weizd",
+          userCode: "weizd1",
           img: "https://dss0.bdstatic.com/6Ox1bjeh1BF3odCf/it/u=902229019,2472101033&fm=74&app=80&f=JPEG&size=f121,121?sec=1880279984&t=93f1bd18375537950a8fe0b67d0206cb"
         },
         loginStatus:false,
@@ -79,7 +80,18 @@ export default {
           toId:'',
           operate:'',
           msg:''
-        }
+        },
+        messages: [
+          {
+            id: '1',
+            fromId: '1',
+            fromName: '魏正迪',
+            fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
+            toId: '2',
+            msg: 'Hello，这是一个基于Vue + Vuex + Webpack构建的简单chat示例，聊天记录保存在localStorge, 有什么问题可以通过Github Issue问我。',
+            date: new Date()
+          }
+        ]
     }
   },
   methods: {
@@ -87,19 +99,48 @@ export default {
       this.chatData.toId = message.id;
       this.chatData.operate = message.type;
     },
+    register(){
+      let user = this.user;
+      registerUser(user)
+        .then((data) => {
+          console.log(data);
+          if(data.code == 200){
+            this.user = data.data;
+            this.$notify({
+              type: 'success',
+              message: "【"+this.user.username+"】注册成功"
+            });
+          }else{
+            this.$notify({
+              type: 'warning',
+              message: data.msg
+            });
+          }
+        });
+    },
+    toLogin(user){
+      this.user.userCode = user.userCode;
+      this.user.username = user.username;
+      this.login();
+    },
     login(){
       let userCode = this.user.userCode;
       getUserByUserCode(userCode).then(data => {
+        console.log(data);
         if(data.code == 200){
           if(data.data != null){
             this.user = data.data;
             this.user.img = this.img;
+
+            this.chatData.fromId = data.data.id;
+            this.chatData.fromName = data.data.username;
+
             this.initWebSocket();
             this.loginStatus = true;
             return;
           }
         }
-        this.$message({
+        this.$notify({
           message: "账号["+userCode+"]不存在",
           type: 'warning'
         })
@@ -111,6 +152,10 @@ export default {
       this.userGroupInfo = [];
       this.msgContainer = '';
 
+    },
+    sendMessage(message){
+      this.chatData.msg = message;
+      this.websocketSend(JSON.stringify(this.chatData));
     },
     //初始化websocket
     initWebSocket(){
@@ -159,7 +204,7 @@ export default {
     }
   },
   mounted() {
-    this.login();
+    // this.login();
   }
 
 }
@@ -171,10 +216,15 @@ export default {
       <card :user="user"/>
       <list :sessionInfo="sessionInfo" :currentId="chatData.toId" @currentIdChange="changeCurrentId"/>
     </div>
-    <div class="main">
-        <message></message>
-        <text></text>
+    <div class="main" v-if="loginStatus">
+        <message :messages="messages" :user="user"></message>
+        <msg @messageSend="sendMessage"></msg>
     </div>
+
+    <div class="sign" v-if="loginStatus === false">
+        <sign @toLogin="toLogin"></sign>
+    </div>
+
   </div>
 </template>
 

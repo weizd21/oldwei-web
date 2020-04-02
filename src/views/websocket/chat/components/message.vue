@@ -6,6 +6,7 @@ export default {
       // session: ({ sessions, currentSessionId }) => sessions.find(session => session.id === currentSessionId)
     }
   },
+  props:['messages','user'],
   filters: {
     // 将日期过滤为 hour:minutes
     time(date) {
@@ -18,24 +19,24 @@ export default {
   directives: {
     // 发送消息后滚动到底部
     'scroll-bottom'() {
-      this.vm.$nextTick(() => {
-        this.el.scrollTop = this.el.scrollHeight - this.el.clientHeight
-      })
+      // this.vm.$nextTick(() => {
+      //   this.el.scrollTop = this.el.scrollHeight - this.el.clientHeight
+      // })
     }
   }
 }
 </script>
 
 <template>
-  <div v-scroll-bottom="session.messages" class="message">
-    <ul v-if="session">
-      <li v-for="item in session.messages" :key="item">
+  <div v-scroll-bottom="messages" class="message">
+    <ul v-if="true" style="list-style:none;padding-inline-start:0px">
+      <li v-for="item in messages" :key="item.id">
         <p class="time">
           <span>{{ item.date | time }}</span>
         </p>
-        <div class="main" :class="{ self: item.self }">
-          <img class="avatar" width="30" height="30" :src="item.self ? user.img : session.user.img">
-          <div class="text">{{ item.content }}</div>
+        <div class="main" :class="{ self: item.fromId === user.id }">
+          <img class="avatar" width="30" height="30" :src="item.fromId === user.id ? user.img : item.fromImg">
+          <div class="text">{{ item.msg }}</div>
         </div>
       </li>
     </ul>

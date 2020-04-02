@@ -6,7 +6,7 @@ export default {
     // actions: actions,
     getters: {
       // user: ({ user }) => user,
-      filterKey: ({ filterKey }) => filterKey
+      // filterKey: ({ filterKey }) => filterKey
     }
   },
   props:['user'],

@@ -1,6 +1,7 @@
 <script>
 // import { actions } from '../store'
 
+
 export default {
   vuex: {
     // actions: actions,
@@ -14,7 +15,10 @@ export default {
       // currentId: ({ currentSessionId }) => currentSessionId
     }
   },
-  props:['sessionInfo','currentId'],
+  props: {
+    sessionInfo: null,
+    currentId: null
+  },
   methods: {
     selectSession(id,type){
       let res = {
@@ -30,7 +34,7 @@ export default {
 <template>
   <div class="list">
     <ul style="list-style:none;padding-inline-start:0px">
-      <li v-for="item in sessionInfo" :key="item" :class="{ active: item.id === currentId }" @click="selectSession(item.id,item.type)">
+      <li v-for="item in sessionInfo" :key="item.id" :class="{ active: item.id === currentId }" @click="selectSession(item.id,item.type)">
         <img class="avatar" width="30" height="30" :alt="item.name" :src="item.img">
         <p class="name">{{ item.name }}</p>
       </li>

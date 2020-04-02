@@ -32,3 +32,15 @@ export function getUserByUserCode(userCode) {
   })
 
 }
+
+export function registerUser(user) {
+  return request({
+    url: '/user/add',
+    method: 'post',
+    data: user,
+    baseURL: '/api'
+  })
+
+}
+
+

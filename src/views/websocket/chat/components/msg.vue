@@ -13,7 +13,7 @@ export default {
   methods: {
     onKeyup(e) {
       if (e.ctrlKey && e.keyCode === 13 && this.content.length) {
-        // this.sendMessage(this.content)
+        this.$emit("messageSend",this.content);
         this.content = ''
       }
     }
@@ -30,7 +30,7 @@ export default {
 <style lang="less" scoped>
 .text {
     height: 160px;
-    border-top: solid 1px #ddd;
+    border: solid 1px #ddd;
 
     textarea {
         padding: 10px;
