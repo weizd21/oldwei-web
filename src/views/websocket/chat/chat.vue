@@ -29,6 +29,7 @@ const GROUP_MESSAGE = "group_message";
 
 const SINGLE_MESSAGE = "single_message";
 
+let sessionMsg = new Map();
 
 import { getUserByUserCode, registerUser } from "@/api/user";
 
@@ -81,23 +82,95 @@ export default {
           operate:'',
           msg:''
         },
+        message: {
+          id: '122',
+          fromId: '1243068283708526593',
+          fromName: '魏正迪',
+          fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
+          toId: '2',
+          msg: 'Hello，这是一个基于Vue + Vuex + Webpack构建的简单chat示例，聊天记录保存在localStorge, 有什么问题可以通过Github Issue问我。',
+          date: new Date()
+        },
         messages: [
           {
             id: '1',
-            fromId: '1',
+            fromId: '1243068283708526593',
             fromName: '魏正迪',
             fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
             toId: '2',
             msg: 'Hello，这是一个基于Vue + Vuex + Webpack构建的简单chat示例，聊天记录保存在localStorge, 有什么问题可以通过Github Issue问我。',
             date: new Date()
           }
-        ]
+        ],
+        sessionMsg: {
+          "1243068283708526593": [
+            {
+              id: '1',
+              fromId: '1243068283708526593',
+              fromName: '魏正迪',
+              fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
+              toId: '2',
+              msg: 'Hello',
+              date: '2020-04-03 14:30:30'
+            },
+            {
+              id: '2',
+              fromId: '12430682837085265930',
+              fromName: '魏正迪2',
+              fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
+              toId: '2',
+              msg: 'Hello a',
+              date: '2020-04-03 14:30:30'
+            }
+
+          ]
+        },
+        msgMap: new Map()
+
     }
   },
   methods: {
     changeCurrentId(message){
       this.chatData.toId = message.id;
       this.chatData.operate = message.type;
+
+      console.log(this.sessionMsg['1243068283708526593']);
+
+      console.log(this.messages);
+      this.messages = this.sessionMsg['1243068283708526593'];
+      console.log(this.messages);
+      // this.sessionMsg['1243068283708526593'].add(this.messages);
+
+
+      this.msgMap.set('1243068283708526593',[
+        {
+          id: '1',
+          fromId: '1243068283708526593',
+          fromName: '魏正迪',
+          fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
+          toId: '2',
+          msg: 'Hello',
+          date: '2020-04-03 14:30:30'
+        },
+        {
+          id: '2',
+          fromId: '12430682837085265930',
+          fromName: '魏正迪2',
+          fromImg: 'https://dss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1305353222,2352820043&fm=26&gp=0.jpg',
+          toId: '2',
+          msg: 'Hello a',
+          date: '2020-04-03 14:30:30'
+        }
+
+      ]);
+
+      console.log(this.msgMap)
+      let msgSet = new Set();
+      let old = this.msgMap.get('1243068283708526593');
+      old.add(this.message);
+      console.log(this.msgMap.get('1243068283708526593'));
+
+
     },
     register(){
       let user = this.user;

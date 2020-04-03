@@ -10,10 +10,11 @@ export default {
   filters: {
     // 将日期过滤为 hour:minutes
     time(date) {
-      if (typeof date === 'string') {
-        date = new Date(date)
-      }
-      return date.getHours() + ':' + date.getMinutes()
+      // if (typeof date === 'string') {
+      //   date = new Date(date)
+      // }
+      // return date.getHours() + ':' + date.getMinutes()
+      return date;
     }
   },
   directives: {
