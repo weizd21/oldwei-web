@@ -1,5 +1,5 @@
 <template>
-  <uploader :options="options" class="uploader-example" @file-error="onFileError" @file-success="onFileSuccess" @file-added="onFileAdded" @file-progress="onFileProgress">
+  <uploader :options="options" :auto-start="autoStart" class="uploader-example" @file-error="onFileError" @file-success="onFileSuccess" @file-added="onFileAdded" @file-progress="onFileProgress">
     <uploader-unsupport />
     <uploader-drop>
       <p>拖拽文件(夹)</p>
@@ -12,15 +12,26 @@
 </template>
 
 <script>
+  let Base64 = require('js-base64').Base64;
+
 export default {
   data() {
     return {
       upload_key: new Date(),
       options: {
         // https://github.com/simple-uploader/Uploader/tree/develop/samples/Node.js
-        target: 'http://localhost:8081/chunk/upload',
-        testChunks: false
+        // target: 'http://localhost:8015/chunk/upload',
+        // target: 'http://192.168.1.149:8015/chunk/upload',
+        target: 'http://localhost:7070/api/chunk/upload',
+        testChunks: false,
+        // 分块大小
+        chunkSize: 10*1024*1024,
+        // 上传文件时文件名的参数名
+        fileParameterName: 'file',
+        successStatus: [200,1],
+        permanentErrors: [400,0],
       },
+      autoStart: false,
       attrs: {
         accept: 'image/*'
       }
@@ -36,13 +47,17 @@ export default {
     onFileAdded(file) {
       // console.log(file);
       // console.log('选择文件 ${file.name}');
+      console.log(file);
+
+
+      console.log(Base64.encode("match(n) where n.name = \"测试\" return n limit 20"))
     },
     onFileSuccess(rootFile, file, response, chunk) {
       // console.log(rootFile);
       // console.log(file);
       // console.log(response);
       // console.log(chunk);
-      console.log(file.name + 'upload success ')
+      console.log(file.name + ' upload success ')
 
       console.log(response)
     },
