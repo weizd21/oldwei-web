@@ -13,6 +13,48 @@
 
 <script>
   let Base64 = require('js-base64').Base64;
+  import SparkMD5 from 'spark-md5';
+
+  /**
+   * 计算文件的MD5
+   * @param file 文件
+   * @param chunkSize 分片大小
+   * @returns Promise
+   */
+  function md5(file, chunkSize) {
+    return new Promise((resolve, reject) => {
+      let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+      let chunks = Math.ceil(file.size / chunkSize);
+      let currentChunk = 0;
+      let spark = new SparkMD5.ArrayBuffer();
+      let fileReader = new FileReader();
+
+      fileReader.onload = function(e) {
+        spark.append(e.target.result);
+        currentChunk++;
+        if (currentChunk < chunks) {
+          loadNext();
+        } else {
+          let md5 = spark.end();
+          resolve(md5);
+        }
+      };
+
+      fileReader.onerror = function(e) {
+        reject(e);
+      };
+
+      function loadNext() {
+        let start = currentChunk * chunkSize;
+        let end = start + chunkSize;
+        if (end > file.size){
+          end = file.size;
+        }
+        fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+      }
+      loadNext();
+    });
+  }
 
 export default {
   data() {
@@ -22,7 +64,8 @@ export default {
         // https://github.com/simple-uploader/Uploader/tree/develop/samples/Node.js
         // target: 'http://localhost:8015/chunk/upload',
         // target: 'http://192.168.1.149:8015/chunk/upload',
-        target: 'http://localhost:7070/api/chunk/upload',
+        target: 'http://localhost:8015/chunk/upload',
+        // target: 'http://localhost:7070/api/chunk/upload',
         testChunks: false,
         // 分块大小
         chunkSize: 10*1024*1024,
@@ -30,6 +73,10 @@ export default {
         fileParameterName: 'file',
         successStatus: [200,1],
         permanentErrors: [400,0],
+        generateUniqueIdentifier:function (file) {
+
+          return file.md5;
+        }
       },
       autoStart: false,
       attrs: {
@@ -47,10 +94,15 @@ export default {
     onFileAdded(file) {
       // console.log(file);
       // console.log('选择文件 ${file.name}');
+      console.log("---------------onFileAdded-----------------")
       console.log(file);
+      md5(file,1024).then(e=>{
+        file.md5 = e;
+      }).catch(e=>{
+        file.md5 = file.name + '-default-md5';
+      })
 
-
-      console.log(Base64.encode("match(n) where n.name = \"测试\" return n limit 20"))
+      // console.log(Base64.encode("match(n) where n.name = \"测试\" return n limit 20"))
     },
     onFileSuccess(rootFile, file, response, chunk) {
       // console.log(rootFile);
